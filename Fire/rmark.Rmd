@@ -14,12 +14,13 @@ library(tidyverse)
 library(sf)
 library(leaflet)
 library(tmap)
-
+library(shiny)
+library(plotly)
 
 fire <- st_read("Fire_Output.shp")
 rx_fire <- st_read(".", layer = "nonfire_rx_Output")
 rx_nonfire <- st_read(".", layer = "nonfire_rx_Output")
-
+county_pop <- read_csv("ca_county_pop.csv")
 
 ```
 
@@ -34,6 +35,7 @@ fire_year <- fire %>%
 
 
 fire_trans_2007 <- st_transform(fire_year, crs = 4326)
+
 
 leaflet(fire_trans_2007) %>% 
   addPolygons()
