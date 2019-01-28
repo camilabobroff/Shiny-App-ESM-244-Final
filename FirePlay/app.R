@@ -3,38 +3,55 @@ library(shiny)
 
 
 ui <- fluidPage(
-  leafletOutput("map"),
-  fluidRow(
-    column(4,
+  titlePanel("California Fires"),
+  sidebarLayout(
+    mainPanel(leafletOutput("map")),
+    sidebarPanel( 
            
            # Date slider 
-           sliderInput("date_range", label = "Select Date", min = 2000, 
-                       max = 2002, value = c(2000, 2002)))
+           sliderInput("date_range", 
+                       label = "Select Date", 
+                       min = 2000, 
+                       max = 2002,
+                       value = c(2000, 2002)),
+           
+    # search bar based on fire names
+    tags$div(title = "Search by name of fire", #this creates an information box that displays the text when hovering over the widget
+             selectInput(inputId = "fire", 
+                         label = "Fire Name", 
+                         choices = sort(unique(fire_trans_2007$FIRE_NAME))))
     )
   )
+)
+
+
+server <- function(input, output) {
+
   
-
-
-server <- function(input, output, session) {
-
-  #code for reacting with the date slider -- need to figure out how to coerce factor(YEAR_) into numeric so that we can filter
-  data_input <- reactive({
-    fire_trans_2007 %>% 
-      filter( YEAR_ >= as.numeric(input$date_range[1])) %>% 
-      filter(YEAR_ <= as.numeric(input$date_range[2]))
-  })
   
   #this outputs the map
   output$map <- renderLeaflet({
+    
+    
+    #allows user to highlight a polygon based on the selected date range
+    pal <- colorFactor(
+      palette = "Red",
+      domain = input$date_range
+    )
+    
+    #renders the map
     leaflet(fire_trans_2007) %>% 
-      addTiles() %>%
-     addPolygons(
-       fill = data_input()$YEAR_
-     )
+      addProviderTiles("Esri.WorldTopoMap") %>% 
+      addPolygons(
+        fillColor = ~pal(fire_trans_2007$YEAR_)
+      )
   })
   
-}
+  
 
+  
+
+}
 
 # Run the application 
 shinyApp(ui = ui, server = server)
