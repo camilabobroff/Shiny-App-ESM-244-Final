@@ -5,6 +5,10 @@ library(leaflet)
 library(tmap)
 library(plotly)
 
+#####to do list:
+#mutate $Shape_area from sq. m to acres sq.
+#consider: changing from polygons to points - might render faster in the app
+
 
 fire_year <- fire %>% 
   select(YEAR_, FIRE_NAME, Shape_Area) %>% 
@@ -56,7 +60,8 @@ server <- function(input, output) {
       addProviderTiles("Esri.WorldTopoMap") %>% 
       addPolygons(
         fillColor = ~pal(fire_year$YEAR_),
-        popup = paste("<h4> Fire Description </h4>", fire_year$YEAR_ )
+        popup = paste("<h4> Fire Description </h4>", "<p>Fire name:</P>", fire_year$FIRE_NAME, "<p> Year: </>", fire_year$YEAR_, "<p>Size:</p>", fire_year$Shape_Area, "sq. meters"),
+       options =  popupOptions(maxWidth = 1000) #need to adjust the pop up asthetics
       )
    
   })
