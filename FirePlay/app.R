@@ -6,7 +6,6 @@ library(tmap)
 library(plotly)
 
 
-
 fire_year <- fire %>% 
   select(YEAR_, FIRE_NAME, Shape_Area) %>% 
   filter(YEAR_ ==  "2000" | YEAR_ == "2001" | YEAR_ == "2002" | YEAR_ == "2003")
@@ -53,10 +52,11 @@ server <- function(input, output) {
       )
       
     #renders the map
-    leaflet(fire_trans_2007) %>% 
+    leaflet(fire_year) %>% 
       addProviderTiles("Esri.WorldTopoMap") %>% 
       addPolygons(
-        fillColor = ~pal(fire_year$YEAR_)
+        fillColor = ~pal(fire_year$YEAR_),
+        popup = paste("<h4> Fire Description </h4>", fire_year$YEAR_ )
       )
    
   })
