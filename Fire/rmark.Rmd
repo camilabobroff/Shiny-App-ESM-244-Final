@@ -13,9 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(sf)
 library(leaflet)
-library(tmap)
 library(shiny)
 library(plotly)
+library(spData)
+
 
 fire <- st_read("Fire_Output.shp")
 rx_fire <- st_read(".", layer = "nonfire_rx_Output")
@@ -23,6 +24,14 @@ rx_nonfire <- st_read(".", layer = "nonfire_rx_Output")
 county_pop <- read_csv("ca_county_pop.csv")
 
 ```
+
+```{r}
+
+vector_filepath = system.file("firePoints.gpkg", package = "spData")
+fire_points = st_read(vector_filepath)
+```
+
+
 
 
 ```{r}

@@ -7,11 +7,14 @@ library(plotly)
 
 #####to do list:
 #mutate $Shape_area from sq. m to acres sq.
+#redefine cause codes from $CAUSE to actual definitions so that the cause can be clearly stated in the popup
 #consider: changing from polygons to points - might render faster in the app
+#####can then add each fire using addCircleMarkers
+#consider also: do we want to onl include say, the largest 1000 fires in history range?
 
 
 fire_year <- fire %>% 
-  select(YEAR_, FIRE_NAME, Shape_Area) %>% 
+  select(YEAR_, FIRE_NAME, Shape_Area, CAUSE) %>% 
   filter(YEAR_ ==  "2000" | YEAR_ == "2001" | YEAR_ == "2002" | YEAR_ == "2003")
 
 
@@ -55,13 +58,14 @@ server <- function(input, output) {
         domain = input$date_range
       )
       
+ 
+      
     #renders the map
     leaflet(fire_year) %>% 
       addProviderTiles("Esri.WorldTopoMap") %>% 
       addPolygons(
         fillColor = ~pal(fire_year$YEAR_),
-        popup = paste("<h4> Fire Description </h4>", "<p>Fire name:</P>", fire_year$FIRE_NAME, "<p> Year: </>", fire_year$YEAR_, "<p>Size:</p>", fire_year$Shape_Area, "sq. meters"),
-       options =  popupOptions(maxWidth = 1000) #need to adjust the pop up asthetics
+        popup = paste("<h3 style = 'color: red'> Fire Description </h3>", "<b>Fire name:</b>", fire_year$FIRE_NAME, "<br", "<b>Year:</b>", fire_year$YEAR_,"<br>", "<b>Size:</b>", fire_year$Shape_Area, "Sq.Meters", "<br>", "<b>Cause code</b>", fire_year$CAUSE, sep = " ") 
       )
    
   })
