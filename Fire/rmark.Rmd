@@ -50,10 +50,11 @@ fire_year <- st_transform(fire_year, crs = 4326)
 
 ```{r}
 
-fire_map <- ggplot(fire_year) +
-  geom_sf(aes(fill = Shape_Area))
-fire_map
+top100 <- fire %>% 
+  select(YEAR_, FIRE_NAME,Shape_Area, CAUSE) %>% 
+  arrange(-Shape_Area)
 
+top100 <- top100[1:100,]
 ```
 
 
