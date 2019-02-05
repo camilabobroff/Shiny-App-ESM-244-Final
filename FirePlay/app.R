@@ -39,9 +39,9 @@ ui <- fluidPage(
            # Date slider 
            sliderInput("date_range", 
                        label = "Select Date", 
-                       min = min(as.numeric(fire_year$YEAR_)), 
-                       max = max(as.numeric(fire_year$YEAR_)),
-                       value = range(as.numeric(fire_year$YEAR_)),
+                       min = min(as.numeric(paste(fire_year$YEAR_))), 
+                       max = max(as.numeric(paste(fire_year$YEAR_))),
+                       value = range(as.numeric(paste(fire_year$YEAR_))),
                        step = 1,
                        sep = ""),
            
@@ -60,7 +60,7 @@ server <- function(input, output, session) {
   #create new reactive df based on slider date inpute in the ui
   reactive_date <- reactive({
     fire_year %>%
-      filter(as.numeric(YEAR_) >= input$date_range[1] & as.numeric(YEAR_) <= input$date_range[2])
+      filter(as.numeric(paste(YEAR_)) >= input$date_range[1] & as.numeric(paste(YEAR_)) <= input$date_range[2])
   })
   
   #this outputs the map
