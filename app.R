@@ -14,21 +14,20 @@ library(shinythemes)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   theme = shinytheme("sandstone"),
-  
-  
+
+### NEED TO FIX TABS
+
   # Application title
   navbarPage("Playing with Fire... Data",
-             
+        
+        sidebarLayout(
              sidebarPanel(
-               tags$img(src='justin_sullivan_getty_images.png', height=200, width=200),
-               tags$figcaption("Justin Sullivan/Getty Images")
-             )
-  ),
-  mainPanel(
-    uiOutput
-  )
+               tags$img(src='justin_sullivan_getty_images.png', height=150, width=175),
+               tags$figcaption("A firefighter monitoring the Mendocino Complex fire on Aug. 7, 2018. Justin Sullivan/Getty Images")
+             ),
+             mainPanel("A summary of the app, what it does, how to use it and a description of the data (including citations). Plus small background info paragraph on significance of fires in CA")),
   tabPanel("Map"),
-  tabPanel("Graphs")
+  tabPanel("Graphs")))
   # Sidebar with a slider input for number of bins 
   # sidebarLayout(
   #  sidebarPanel(
@@ -37,21 +36,13 @@ ui <- fluidPage(
   #  choices = sort(unique(top100$CAUSE)))),
   #  mainPanel(
   #    plotOutput("acresPlot")
-)
+
 
 
 
 # Define server logic required to draw a histogram
-server <- function(input, output, session) { # Added session to see if it would help render the image
-  output$Image <- renderImage({
-    filename <- normalizePath(file.path('./www', 
-                                        paste('image', input$n, '.png', sep='')))
-    
-    list(src = filename)
-    
-  }, deleteFile = FALSE)
-  
-}
+server <- function(input, output, session) 
+{}
 # Run the application 
 shinyApp(ui = ui, server = server)
 
