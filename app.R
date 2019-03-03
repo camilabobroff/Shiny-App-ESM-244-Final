@@ -10,6 +10,15 @@
 library(shiny)
 library(tidyverse)
 library(shinythemes)
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(shiny)
+library(plotly)
+library(spData)
+library(varhandle)
+
+fire <- st_read("Fire_Output.shp")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
