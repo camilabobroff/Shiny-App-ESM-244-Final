@@ -22,7 +22,7 @@ ui <- fluidPage(
         
         sidebarLayout(
              sidebarPanel(
-               tags$img(src='justin_sullivan_getty_images.png', height=150, width=175),
+               tags$img(src='justin_sullivan_getty_images.jpg', height=150, width=175),
                tags$figcaption("A firefighter monitoring the Mendocino Complex fire on Aug. 7, 2018. Justin Sullivan/Getty Images")
              ),
              mainPanel("A summary of the app, what it does, how to use it and a description of the data (including citations). Plus small background info paragraph on significance of fires in CA")),
