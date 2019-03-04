@@ -27,22 +27,36 @@ ui <- fluidPage(
              ),
              mainPanel("A summary of the app, what it does, how to use it and a description of the data (including citations). Plus small background info paragraph on significance of fires in CA")),
   tabPanel("Map"),
-  tabPanel("Graphs")))
-  # Sidebar with a slider input for number of bins 
-  # sidebarLayout(
-  #  sidebarPanel(
-  #  selectInput(inputId = "acres_burned",
-  #  label = "Acres Burned", 
-  #  choices = sort(unique(top100$CAUSE)))),
-  #  mainPanel(
-  #    plotOutput("acresPlot")
+  tabPanel("Graphs",
+           sidebarLayout(
+             sidebarPanel(
+               tags$img(src='thomas_fire.jpg', height=150, width=175),
+               tags$figcaption("Caption/source")
+             ),
+             mainPanel(plotOutput("acresPlot"))))))
+
 
 
 
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) 
-{}
+{
+  
+  output$acresPlot <- renderPlot({
+    
+    # Plot
+    ggplot(data = acres, aes(x = YEAR_, y = acres_burn_tot_1000))+
+    geom_col(fill = "firebrick1", colour = "firebrick4")+
+    theme_classic()+
+    scale_x_discrete(expand = c(0,0), limit = c(1877,2017))+
+    scale_y_continuous(expand = c(0,0), limit = c(0, 510))+
+    labs(y = "Acres Burned (Thousands)", x = "Year")
+  })
+  
+}
+  
+
 # Run the application 
 shinyApp(ui = ui, server = server)
 

@@ -17,7 +17,56 @@ library(shiny)
 library(plotly)
 library(spData)
 library(varhandle)
+library(RColorBrewer)
+library(colorspace)
 
 fire <- st_read("Fire_Output.shp")
+```
+
+```{r}
+top100 <- fire %>% 
+  filter(STATE == "CA") %>% 
+  select(YEAR_, FIRE_NAME,GIS_ACRES, CAUSE) %>% 
+  arrange(-GIS_ACRES)
+
+top100$YEAR_ <- unfactor(top100$YEAR_)
+
+top100 <- top100[1:100,] %>% 
+  mutate(CAUSE = case_when(
+    CAUSE == 1 ~ "Lightning",
+    CAUSE == 2 ~ "Equipment Use",
+    CAUSE == 4 ~ "Campfire",
+    CAUSE == 5 ~ "Debris",
+    CAUSE == 6 ~ "Railroad",
+    CAUSE == 7 ~ "Arson",
+    CAUSE == 9 ~ "Miscellaneous",
+    CAUSE == 10 ~ "Vehicle",
+    CAUSE == 11 ~ "Power Line",
+    CAUSE == 14 ~ "Unknown/Unidentified"
+  )) %>% 
+  arrange(YEAR_)
+```
+
+```{r}
+top100 <- top100 %>% 
+  st_simplify(dTolerance = 5000)
+```
+
+```{r}
+acres <- top100 %>%
+      group_by(YEAR_) %>% 
+      mutate(acres_burn_tot = sum(GIS_ACRES)) %>% 
+      mutate(acres_burn_tot_1000 = acres_burn_tot/1000)
+```
+
+```{r}
+top100 <- st_transform(top100, crs = 4326)
+centroid <- st_centroid(top100)
+centroid_less <- centroid %>% 
+  mutate(lat = unlist(map(centroid$geometry,1)),
+           long = unlist(map(centroid$geometry,2))) %>% 
+  select(GIS_ACRES, lat, long) %>% 
+  st_drop_geometry()
+top100 <- merge(top100, centroid_less, by = "GIS_ACRES")
 ```
 
