@@ -1,0 +1,23 @@
+---
+title: "CAMILA_shiny"
+author: "Camila Bobroff"
+date: "3/3/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(shiny)
+library(plotly)
+library(spData)
+library(varhandle)
+
+fire <- st_read("Fire_Output.shp")
+```
+
